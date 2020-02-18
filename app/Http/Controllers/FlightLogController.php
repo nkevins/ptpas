@@ -59,6 +59,10 @@ class FlightLogController extends Controller
         $fl->aircraft_id = $request->input('aircraft');
         $fl->departure = $request->input('from');
         $fl->destination = $request->input('to');
+        if (trim($request->input('route')) != '')
+            $fl->route = $request->input('route');
+        else
+            $fl->route = '';
         $fl->off_time = $request->input('blockOff');
         $fl->on_time = $request->input('blockOn');
         
@@ -70,7 +74,10 @@ class FlightLogController extends Controller
         $fl->block_time = $offTime->diffInMinutes($onTime);
         
         $fl->pic = $request->input('pic');
-        $fl->sic = $request->input('sic');
+        if (trim($request->input('sic')) != '')
+            $fl->sic = $request->input('sic');
+        else
+            $fl->sic = null;
         if (trim($request->input('eob1')) != '')
             $fl->eob1 = $request->input('eob1');
         else
@@ -103,8 +110,11 @@ class FlightLogController extends Controller
                         $query->where('name', 'Pilot');
                     })->get();
         $block_time = $this->convertDurationIntToString($fl->block_time);
+        $formatted_off_time = Carbon::createFromFormat('H:i:s', $fl->off_time)->format('H:i');
+        $formatted_on_time = Carbon::createFromFormat('H:i:s', $fl->on_time)->format('H:i');
         
-        return view('admin/flight_log/edit', compact('fl', 'aircrafts', 'airports', 'pilots', 'block_time'));
+        return view('admin/flight_log/edit', compact('fl', 'aircrafts', 'airports', 'pilots', 'block_time',
+                    'formatted_off_time', 'formatted_on_time'));
     }
     
     public function update(Request $request, $id)
@@ -128,6 +138,10 @@ class FlightLogController extends Controller
         $fl->aircraft_id = $request->input('aircraft');
         $fl->departure = $request->input('from');
         $fl->destination = $request->input('to');
+        if (trim($request->input('route')) != '')
+            $fl->route = $request->input('route');
+        else
+            $fl->route = '';
         $fl->off_time = $request->input('blockOff');
         $fl->on_time = $request->input('blockOn');
         
@@ -139,7 +153,10 @@ class FlightLogController extends Controller
         $fl->block_time = $offTime->diffInMinutes($onTime);
         
         $fl->pic = $request->input('pic');
-        $fl->sic = $request->input('sic');
+        if (trim($request->input('sic')) != '')
+            $fl->sic = $request->input('sic');
+        else
+            $fl->sic = null;
         if (trim($request->input('eob1')) != '')
             $fl->eob1 = $request->input('eob1');
         else

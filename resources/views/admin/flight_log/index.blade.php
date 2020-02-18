@@ -29,7 +29,7 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2"></th>
-                                            <th colspan="3" style="text-align:center;">Route</th>
+                                            <th colspan="4" style="text-align:center;">Route</th>
                                             <th colspan="3" style="text-align:center;">Block</th>
                                             <th colspan="4" style="text-align:center;">Crew</th>
                                             <th colspan="3"></th>
@@ -40,6 +40,7 @@
                                             <th>Aircraft</th>
                                             <th>FROM</th>
                                             <th>TO</th>
+                                            <th>Route</th>
                                             <th>OFF</th>
                                             <th>ON</th>
                                             <th>TIME</th>
@@ -84,11 +85,12 @@
                     { data: 'aircraft.registration' },
                     { data: 'departure.name' },
                     { data: 'destination.name' },
+                    { data: 'route' },
                     { data: 'off_time' },
                     { data: 'on_time' },
                     { data: 'block_time' },
                     { data: 'pic.name' },
-                    { data: 'sic.name' },
+                    { data: 'sic' },
                     { data: 'eob1' },
                     { data: 'eob2' },
                     { data: 'pax' },
@@ -102,12 +104,6 @@
                         }
                     },
                     {
-                        targets: 5,
-                        render: function (data, type, full, meta) {
-                            return moment(data, "HH:mm:ss").format("HH:mm");
-                        }
-                    },
-                    {
                         targets: 6,
                         render: function (data, type, full, meta) {
                             return moment(data, "HH:mm:ss").format("HH:mm");
@@ -115,13 +111,28 @@
                     },
                     {
                         targets: 7,
+                        render: function (data, type, full, meta) {
+                            return moment(data, "HH:mm:ss").format("HH:mm");
+                        }
+                    },
+                    {
+                        targets: 8,
                         searchable: false,
                         render: function (data, type, full, meta) {
                             return moment.utc(moment.duration(parseInt(data), "minutes").asMilliseconds()).format("HH:mm");
                         }
                     },
                     {
-                        targets: 14,
+                        targets: 10,
+                        render: function (data, type, full, meta) {
+                            if (data)
+                                return data.name;
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        targets: 15,
                         data: null,
                         searchable: false,
                         render: function (data, type, full, meta) {

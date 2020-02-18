@@ -53,6 +53,36 @@
                                     	</div>
                                     </div>
                                     
+                                    <!-- Small boxes (Stat box) -->
+                                    <div class="row">
+                                        <div class="col-lg-3 col-6">
+                                            <!-- small box -->
+                                            <div class="small-box bg-info">
+                                                <div class="inner">
+                                                    <h3 id="totalFlightsSummary">0</h3>
+                                                    <p>Total Flights</p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="ion ion-plane"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ./col -->
+                                        <div class="col-lg-3 col-6">
+                                            <!-- small box -->
+                                            <div class="small-box bg-success">
+                                                <div class="inner">
+                                                    <h3 id="totalHoursSummary">00:00</h3>
+                                                    <p>Total Time</p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="ion ion-clock"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ./col -->
+                                    </div>
+                                    
                                     <div class="row">
                                     	<div class="col-6">
                                     		<div class="card card-secondary">
@@ -107,7 +137,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th colspan="2"></th>
-                                                                    <th colspan="3" style="text-align:center;">Route</th>
+                                                                    <th colspan="4" style="text-align:center;">Route</th>
                                                                     <th colspan="3" style="text-align:center;">Block</th>
                                                                     <th colspan="4" style="text-align:center;">Crew</th>
                                                                     <th colspan="3"></th>
@@ -118,6 +148,7 @@
                                                                     <th>Aircraft</th>
                                                                     <th>FROM</th>
                                                                     <th>TO</th>
+                                                                    <th>Route</th>
                                                                     <th>OFF</th>
                                                                     <th>ON</th>
                                                                     <th>TIME</th>
@@ -192,11 +223,16 @@
             $.getJSON('/admin/dashboard/data/totalFlights?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
                 var aircrafts = new Array();
                 var totalFlightsCount = new Array();
+                var totalFlights = 0;
                 
                 result.forEach(function(data){
                     aircrafts.push(data.registration);
                     totalFlightsCount.push(data.flight_count);
+                    totalFlights += parseInt(data.flight_count);
                 });
+                
+                // Populate summary statistic
+                $('#totalFlightsSummary').text(totalFlights);
                 
                 var pieChartCanvas = $('#totalFlightChart').get(0).getContext('2d')
                 var pieOptions     = {
@@ -221,11 +257,16 @@
             $.getJSON('/admin/dashboard/data/flightHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
                 var aircrafts = new Array();
                 var totalHours = new Array();
+                var totalHoursInMinutes = 0;
                 
                 result.forEach(function(data){
                     aircrafts.push(data.registration);
                     totalHours.push(data.block_time);
+                    totalHoursInMinutes += parseInt(data.block_time);
                 });
+                
+                // Populate summary statistic
+                $('#totalHoursSummary').text(pad(Math.floor(totalHoursInMinutes / 60), 2) + ':' + pad(totalHoursInMinutes % 60, 2));
                 
                 var pieChartCanvas = $('#totalTimeChart').get(0).getContext('2d')
                 var pieOptions     = {
@@ -345,11 +386,12 @@
                 { data: 'aircraft.registration' },
                 { data: 'departure.name' },
                 { data: 'destination.name' },
+                { data: 'route' },
                 { data: 'off_time' },
                 { data: 'on_time' },
                 { data: 'block_time' },
                 { data: 'pic.name' },
-                { data: 'sic.name' },
+                { data: 'sic' },
                 { data: 'eob1' },
                 { data: 'eob2' },
                 { data: 'pax' },
@@ -363,12 +405,6 @@
                     }
                 },
                 {
-                    targets: 5,
-                    render: function (data, type, full, meta) {
-                        return moment(data, "HH:mm:ss").format("HH:mm");
-                    }
-                },
-                {
                     targets: 6,
                     render: function (data, type, full, meta) {
                         return moment(data, "HH:mm:ss").format("HH:mm");
@@ -376,11 +412,26 @@
                 },
                 {
                     targets: 7,
+                    render: function (data, type, full, meta) {
+                        return moment(data, "HH:mm:ss").format("HH:mm");
+                    }
+                },
+                {
+                    targets: 8,
                     searchable: false,
                     render: function (data, type, full, meta) {
                         return moment.utc(moment.duration(parseInt(data), "minutes").asMilliseconds()).format("HH:mm");
                     }
-                }
+                },
+                {
+                    targets: 10,
+                    render: function (data, type, full, meta) {
+                        if (data)
+                            return data.name;
+                        else
+                            return '';
+                    }
+                },
             ]
         });
     </script>

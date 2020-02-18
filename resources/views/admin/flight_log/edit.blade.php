@@ -62,15 +62,21 @@
                                             </select>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="route" class="col-sm-2 col-form-label">Route</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" name="route" id="route">{{$fl->route}}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="blockOff" class="col-sm-2 col-form-label">Block Off <span style="color:red;">*</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="blockOff" name="blockOff" data-inputmask="'mask': '99:99'" data-mask required required value="{{$fl->off_time}}" />
+                                                <input type="text" class="form-control" id="blockOff" name="blockOff" data-inputmask="'mask': '99:99'" data-mask required required value="{{$formatted_off_time}}" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="blockOn" class="col-sm-2 col-form-label">Block On <span style="color:red;">*</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="blockOn" name="blockOn" data-inputmask="'mask': '99:99'" data-mask required required value="{{$fl->on_time}}" />
+                                                <input type="text" class="form-control" id="blockOn" name="blockOn" data-inputmask="'mask': '99:99'" data-mask required required value="{{$formatted_on_time}}" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -85,15 +91,16 @@
                                             <label class="col-sm-2 col-form-label">PIC</label>
                                             <select class="col-sm-10 form-control" name="pic" required>
                                                 @foreach ($pilots as $p)
-                                                    <option value="{{$p->id}}" {{$fl->pic == $a->id ? 'selected' : ''}}>{{$p->name}}</option>
+                                                    <option value="{{$p->id}}" {{$fl->pic == $p->id ? 'selected' : ''}}>{{$p->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label">SIC</label>
-                                            <select class="col-sm-10 form-control" name="sic" required>
+                                            <select class="col-sm-10 form-control" name="sic">
+                                                <option value=""></option>
                                                 @foreach ($pilots as $p)
-                                                    <option value="{{$p->id}}" {{$fl->sic == $a->id ? 'selected' : ''}}>{{$p->name}}</option>
+                                                    <option value="{{$p->id}}" {{$fl->sic == $p->id ? 'selected' : ''}}>{{$p->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>

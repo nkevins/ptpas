@@ -20,11 +20,12 @@ class CreateFlightLogsTable extends Migration
             $table->unsignedBigInteger('aircraft_id');
             $table->unsignedBigInteger('departure');
             $table->unsignedBigInteger('destination');
+            $table->text('route');
             $table->time('off_time');
             $table->time('on_time');
             $table->integer('block_time');
             $table->unsignedBigInteger('pic');
-            $table->unsignedBigInteger('sic');
+            $table->unsignedBigInteger('sic')->nullable();
             $table->string('eob1')->default('');
             $table->string('eob2')->default('');
             $table->text('pax');

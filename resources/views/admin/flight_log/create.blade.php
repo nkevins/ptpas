@@ -62,6 +62,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="route" class="col-sm-2 col-form-label">Route</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" name="route" id="route">{{old('route')}}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="blockOff" class="col-sm-2 col-form-label">Block Off <span style="color:red;">*</span></label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="blockOff" name="blockOff" data-inputmask="'mask': '99:99'" data-mask required required value="{{old('blockOff')}}" />
@@ -85,7 +91,8 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label">SIC</label>
-                                            <select class="col-sm-10 form-control" name="sic" required>
+                                            <select class="col-sm-10 form-control" name="sic">
+                                                <option value=""></option>
                                                 @foreach ($pilots as $p)
                                                     <option value="{{$p->id}}" @if (old('sic') == $p->id) selected @endif>{{$p->name}}</option>
                                                 @endforeach
