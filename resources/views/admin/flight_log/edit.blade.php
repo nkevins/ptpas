@@ -70,13 +70,13 @@
                                         <div class="form-group row">
                                             <label for="blockOff" class="col-sm-2 col-form-label">Block Off <span style="color:red;">*</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="blockOff" name="blockOff" data-inputmask="'mask': '99:99'" data-mask required required value="{{$formatted_off_time}}" />
+                                                <input type="text" class="form-control" id="blockOff" name="blockOff" data-inputmask="'mask': '99:99'" data-mask required value="{{$formatted_off_time}}" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="blockOn" class="col-sm-2 col-form-label">Block On <span style="color:red;">*</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="blockOn" name="blockOn" data-inputmask="'mask': '99:99'" data-mask required required value="{{$formatted_on_time}}" />
+                                                <input type="text" class="form-control" id="blockOn" name="blockOn" data-inputmask="'mask': '99:99'" data-mask required value="{{$formatted_on_time}}" />
                                             </div>
                                         </div>
                                         <div class="form-group row">

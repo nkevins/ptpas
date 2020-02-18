@@ -184,6 +184,11 @@
 
 @push('scripts')
     <script type="text/javascript">
+        
+        var totalFlightChart = null;
+        var totalFlightHoursChart = null;
+        var crewHoursChart = null;
+        
         $(function () {
             $('#fromDate').daterangepicker({
                 singleDatePicker: true,
@@ -234,12 +239,12 @@
                 // Populate summary statistic
                 $('#totalFlightsSummary').text(totalFlights);
                 
-                var pieChartCanvas = $('#totalFlightChart').get(0).getContext('2d')
+                var totalFlightChartCanvas = $('#totalFlightChart').get(0).getContext('2d')
                 var pieOptions     = {
                     maintainAspectRatio : false,
                     responsive : true,
                 }
-                var pieChart = new Chart(pieChartCanvas, {
+                totalFlightChart = new Chart(totalFlightChartCanvas, {
                     type: 'pie',
                     data: {
                       labels: aircrafts,
@@ -268,7 +273,7 @@
                 // Populate summary statistic
                 $('#totalHoursSummary').text(pad(Math.floor(totalHoursInMinutes / 60), 2) + ':' + pad(totalHoursInMinutes % 60, 2));
                 
-                var pieChartCanvas = $('#totalTimeChart').get(0).getContext('2d')
+                var totalFlightHoursChartCanvas = $('#totalTimeChart').get(0).getContext('2d')
                 var pieOptions     = {
                     maintainAspectRatio : false,
                     responsive : true,
@@ -300,7 +305,10 @@
                     }
                 }
                 
-                var pieChart = new Chart(pieChartCanvas, {
+                if (totalFlightHoursChart)
+                    totalFlightHoursChart.destroy();
+                
+                totalFlightHoursChart = new Chart(totalFlightHoursChartCanvas, {
                     type: 'pie',
                     data: {
                       labels: aircrafts,
@@ -324,7 +332,7 @@
                     totalHours.push(data.hours);
                 });
                 
-                var pieChartCanvas = $('#totalCrewHoursChart').get(0).getContext('2d')
+                var crewHoursChartCanvas = $('#totalCrewHoursChart').get(0).getContext('2d')
                 var pieOptions     = {
                     maintainAspectRatio : false,
                     responsive : true,
@@ -356,7 +364,10 @@
                     }
                 }
                 
-                var pieChart = new Chart(pieChartCanvas, {
+                if (crewHoursChart)
+                    crewHoursChart.destroy();
+                
+                crewHoursChart = new Chart(crewHoursChartCanvas, {
                     type: 'pie',
                     data: {
                       labels: name,
