@@ -67,7 +67,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
                                 <a href="{{action('UserController@index')}}" class="btn btn-secondary">Cancel</a>
                             </div>
                             <!-- /.card-footer -->
@@ -105,6 +105,31 @@
                         </form>
                     </div>
                     <!-- /.card -->
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-6">
+                    <!-- Default box -->
+                    <div class="card">
+                        <form class="form-horizontal" action="{{action('UserController@changeOTPToken')}}" method="POST">
+                            <div class="card-header">
+                                <h3>Change OTP Token</h3>
+                            </div>
+                            <div class="card-body">
+                                @csrf
+                                <input type="hidden" name="userId" value="{{$user->id}}" />
+                                <p>Changing OTP Token will require user to reconfigure Google Authenticator.</p>
+                                <p>This action will invalidate the previous secret key.</p>
+                                <p>The new token will only be displayed ONE time after clicking the Change OTP Token button and not retrievable again.</p>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to change OTP Token?')">Change OTP Token</button>
+                            </div>
+                            <!-- /.card-footer -->
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

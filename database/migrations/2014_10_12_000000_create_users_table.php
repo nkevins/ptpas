@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->boolean('active');
+            $table->text('google2fa_secret');
             $table->rememberToken();
             $table->timestamps();
         });

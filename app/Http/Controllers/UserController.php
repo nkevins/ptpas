@@ -51,11 +51,21 @@ class UserController extends Controller
         else
             $u->email = '';
         $u->active = true;
+        
+        $google2fa = app('pragmarx.google2fa');
+        $u->google2fa_secret = $google2fa->generateSecretKey();
+        
         $u->save();
         $u->roles()->sync($roles);
         
+        $QR_Image = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $u->username,
+            $u->google2fa_secret
+        );
+        
         flash()->success('User Created')->important();
-        return redirect()->action('UserController@index');
+        return view('google2fa/register', ['QR_Image' => $QR_Image, 'secret' => $u->google2fa_secret]);
     }
     
     public function edit($id)
@@ -119,7 +129,25 @@ class UserController extends Controller
         $u->password = Hash::make($request->input('password'));
         $u->save();
          
-        flash()->success('User Password CHanged')->important();
+        flash()->success('User Password Changed')->important();
         return redirect()->action('UserController@index');
+    }
+    
+    public function changeOTPToken(Request $request)
+    {
+        $u = User::findOrFail($request->input('userId'));
+        
+        $google2fa = app('pragmarx.google2fa');
+        
+        $u->google2fa_secret = $google2fa->generateSecretKey();
+        $u->save();
+        
+        $QR_Image = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $u->username,
+            $u->google2fa_secret
+        );
+        
+        return view('google2fa/register', ['QR_Image' => $QR_Image, 'secret' => $u->google2fa_secret]);
     }
 }

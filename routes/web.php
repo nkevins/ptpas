@@ -13,8 +13,11 @@
 
 Route::get('/', 'Auth\LoginController@index')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
+Route::post('/2fa', function () {
+    return redirect('/admin/dashboard');
+})->name('2fa')->middleware('2fa');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', '2fa']], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/logout', 'Auth\LoginController@logout');
         
@@ -43,6 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/user/{id}/edit', 'UserController@edit');
             Route::post('/user/{id}/edit', 'UserController@update');
             Route::post('/user/{id}/changePassword', 'UserController@changePassword');
+            Route::post('/user/changeOTPToken', 'UserController@changeOTPToken');
             
             Route::get('/flight_log', 'FlightLogController@index');
             Route::get('/flight_log/create', 'FlightLogController@create');
