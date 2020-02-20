@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
         Route::get('/dashboard/data/flightHours', 'DashboardController@flightHoursStatisticData');
         Route::get('/dashboard/data/crewHours', 'DashboardController@crewHoursStatisticData');
         
+        Route::get('/myProfile', 'UserController@myProfile');
+        Route::post('/myProfile/changePassword', 'UserController@changeMyPassword');
+        Route::post('/myProfile/changeOTP', 'UserController@changeMyOTPToken');
+        
         Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function () {
             
             Route::get('/aircraft', 'AircraftController@index');
@@ -54,7 +58,6 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
             Route::get('/flight_log/{id}/edit', 'FlightLogController@edit');
             Route::post('/flight_log/{id}/edit', 'FlightLogController@update');
             Route::post('/flight_log/remove', 'FlightLogController@delete');
-            
         });
         
         Route::get('/flight_log/data', 'FlightLogController@flightLogData');

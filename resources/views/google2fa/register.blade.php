@@ -29,10 +29,17 @@
                             <div>
                                 <img src="{{ $QR_Image }}">
                             </div>
+                            @if ($reauthenticating)
+                                <p>You must set up your Google Authenticator app before continuing. You will be unable to login otherwise</p>
+                            @endif
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <a href="{{action('UserController@index')}}"><button class="btn btn-success">Complete</button></a>
+                            @if ($reauthenticating)
+                                <a href="{{action('DashboardController@index')}}"><button class="btn btn-success">Complete</button></a>
+                            @else
+                                <a href="{{action('UserController@index')}}"><button class="btn btn-success">Complete</button></a>
+                            @endif
                         </div>
                         <!-- /.card-footer -->
                     </div>

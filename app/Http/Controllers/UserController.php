@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Role;
 use App\User;
+use Auth;
 
 class UserController extends Controller
 {
@@ -148,6 +149,58 @@ class UserController extends Controller
             $u->google2fa_secret
         );
         
-        return view('google2fa/register', ['QR_Image' => $QR_Image, 'secret' => $u->google2fa_secret]);
+        return view('google2fa/register', ['QR_Image' => $QR_Image, 'secret' => $u->google2fa_secret, 'reauthenticating' => false]);
+    }
+    
+    public function myProfile()
+    {
+        $user = Auth::user();
+        
+        $rolesArray = array();
+        foreach ($user->roles as $r) {
+            array_push($rolesArray, $r->name);
+        }
+        $roles = implode (", ", $rolesArray);
+        
+        
+        return view('admin/user/my_profile', compact('user', 'roles'));
+    }
+    
+    public function changeMyPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:6',
+            'confirmPassword' => 'required|min:6|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            flash()->error($validator->errors()->first())->important();
+            return redirect()->back()->withInput();
+        }
+        
+        $u = Auth::user();
+        $u->password = Hash::make($request->input('password'));
+        $u->save();
+         
+        flash()->success('Password Changed')->important();
+        return redirect()->action('UserController@myProfile');
+    }
+    
+    public function changeMyOTPToken()
+    {
+        $u = Auth::user();
+        
+        $google2fa = app('pragmarx.google2fa');
+        
+        $u->google2fa_secret = $google2fa->generateSecretKey();
+        $u->save();
+        
+        $QR_Image = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $u->username,
+            $u->google2fa_secret
+        );
+        
+        return view('google2fa/register', ['QR_Image' => $QR_Image, 'secret' => $u->google2fa_secret, 'reauthenticating' => true]);
     }
 }
