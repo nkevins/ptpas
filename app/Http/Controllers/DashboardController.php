@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\FlightLog;
+use App\User;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -12,7 +14,12 @@ class DashboardController extends Controller
     
     public function index()
     {
-        return view('admin/dashboard');
+        $pilots = User::where('active', true)
+                    ->whereHas('roles', function (Builder $query) {
+                        $query->where('name', 'Pilot');
+                    })->get();
+                    
+        return view('admin/dashboard', compact('pilots'));
     }
     
     public function totalFlightsStatisticData(Request $request)
@@ -110,5 +117,29 @@ class DashboardController extends Controller
         }
                     
         return response()->json($crewHoursJson);
+    }
+    
+    public function crewHoursPerAircraftStatisticData(Request $request)
+    {
+        if (!$request->has('from_date') || !$request->has('to_date') || !$request->has('pilot_id')) {
+            abort('400');
+        }
+        
+        $fromDate = Carbon::createFromFormat('d/m/Y', $request->input('from_date'))->startOfDay();
+        $toDate = Carbon::createFromFormat('d/m/Y', $request->input('to_date'))->startOfDay();
+        $pilot = $request->input('pilot_id');
+        
+        $stats = DB::table('flight_logs')
+                    ->select(DB::raw('registration, sum(block_time) as block_time'))
+                    ->join('aircrafts', 'aircrafts.id', '=', 'flight_logs.aircraft_id')
+                    ->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate)
+                    ->where(function($query) use ($pilot){
+                            $query->where('pic', $pilot)->orWhere('sic', $pilot);
+                        })
+                    ->groupBy('registration')
+                    ->get();
+                    
+        return $stats->toJson();
     }
 }

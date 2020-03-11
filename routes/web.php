@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
         Route::get('/dashboard/data/totalFlights', 'DashboardController@totalFlightsStatisticData');
         Route::get('/dashboard/data/flightHours', 'DashboardController@flightHoursStatisticData');
         Route::get('/dashboard/data/crewHours', 'DashboardController@crewHoursStatisticData');
+        Route::get('/dashboard/data/crewHoursPerAircraft', 'DashboardController@crewHoursPerAircraftStatisticData');
         
         Route::get('/myProfile', 'UserController@myProfile');
         Route::post('/myProfile/changePassword', 'UserController@changeMyPassword');

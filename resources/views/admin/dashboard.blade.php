@@ -84,25 +84,40 @@
                                     </div>
                                     
                                     <div class="row">
-                                    	<div class="col-6">
+                                    	<div class="col-4">
                                     		<div class="card card-secondary">
                                     			<div class="card-header">
                                     				<h3 class="card-title">Total Flights</h3>
                                     			</div>
                                     			<div class="card-body">
+                                    			    <div class="spinner-border" id="totalFlightChartLoading"></div>
                                     				<canvas id="totalFlightChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     			</div>
                                     			<!-- /.card-body -->
                                     		</div>
                                     		<!-- /.card -->
                                     	</div>
-                                    	<div class="col-6">
+                                    	<div class="col-4">
                                     		<div class="card card-secondary">
                                     			<div class="card-header">
                                     				<h3 class="card-title">Total Time</h3>
                                     			</div>
                                     			<div class="card-body">
+                                    			    <div class="spinner-border" id="totalTimeChartLoading"></div>
                                     				<canvas id="totalTimeChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    			</div>
+                                    			<!-- /.card-body -->
+                                    		</div>
+                                    		<!-- /.card -->
+                                    	</div>
+                                    	<div class="col-4">
+                                    		<div class="card card-secondary">
+                                    			<div class="card-header">
+                                    				<h3 class="card-title">Total Crew Hours</h3>
+                                    			</div>
+                                    			<div class="card-body">
+                                    			    <div class="spinner-border" id="totalCrewHoursChartLoading"></div>
+                                    				<canvas id="totalCrewHoursChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     			</div>
                                     			<!-- /.card-body -->
                                     		</div>
@@ -111,13 +126,20 @@
                                     </div>
                                     
                                     <div class="row">
-                                    	<div class="col-6">
+                                    	<div class="col-4">
                                     		<div class="card card-secondary">
                                     			<div class="card-header">
-                                    				<h3 class="card-title">Total Crew Hours</h3>
+                                    				<h3 class="card-title">Crew Hours Per Aircraft</h3>
                                     			</div>
                                     			<div class="card-body">
-                                    				<canvas id="totalCrewHoursChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    			    <select class="form-control" onchange="searchCrewHoursPerAircraft()" id="crewHourPilotSelection">
+                                    			        <option value=""></option>
+                                    			        @foreach ($pilots as $p)
+                                    			        <option value="{{$p->id}}">{{$p->name}}</option>
+                                    			        @endforeach
+                                    			    </select>
+                                    			    <div class="spinner-border mt-2" id="crewHoursPerAircraftChartLoading" style="display:none;"></div>
+                                    				<canvas id="crewHoursPerAircraftChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     			</div>
                                     			<!-- /.card-body -->
                                     		</div>
@@ -188,6 +210,7 @@
         var totalFlightChart = null;
         var totalFlightHoursChart = null;
         var crewHoursChart = null;
+        var crewHoursPerAircraftChart = null;
         
         $(function () {
             $('#fromDate').daterangepicker({
@@ -225,7 +248,14 @@
             var fromDate = $('#fromDate').val();
             var toDate = $('#toDate').val();
             
+            // Show loading spinner
+            $("#totalFlightChartLoading").show();
+            $("#totalTimeChartLoading").show();
+            $("#totalCrewHoursChartLoading").show();
+            
             $.getJSON('/admin/dashboard/data/totalFlights?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+                $("#totalFlightChartLoading").hide();
+                
                 var aircrafts = new Array();
                 var totalFlightsCount = new Array();
                 var totalFlights = 0;
@@ -244,6 +274,10 @@
                     maintainAspectRatio : false,
                     responsive : true,
                 }
+                
+                if (totalFlightChart)
+                    totalFlightChart.destroy();
+                
                 totalFlightChart = new Chart(totalFlightChartCanvas, {
                     type: 'pie',
                     data: {
@@ -260,6 +294,8 @@
             });
             
             $.getJSON('/admin/dashboard/data/flightHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+                $("#totalTimeChartLoading").hide();
+                
                 var aircrafts = new Array();
                 var totalHours = new Array();
                 var totalHoursInMinutes = 0;
@@ -324,6 +360,8 @@
             });
             
             $.getJSON('/admin/dashboard/data/crewHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+                $("#totalCrewHoursChartLoading").hide();
+                
                 var name = new Array();
                 var totalHours = new Array();
                 
@@ -381,6 +419,9 @@
                     options: pieOptions      
                 })
             });
+            
+            
+            searchCrewHoursPerAircraft();
         }
         
         $("#flightLogTable").DataTable({
@@ -445,5 +486,81 @@
                 },
             ]
         });
+        
+        function searchCrewHoursPerAircraft()
+        {
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var pilot = $('#crewHourPilotSelection').val();
+            
+            if (pilot === '') {
+                if (crewHoursPerAircraftChart)
+                    crewHoursPerAircraftChart.destroy();
+                return;
+            }
+            
+            $("#crewHoursPerAircraftChartLoading").show();
+            
+            $.getJSON('/admin/dashboard/data/crewHoursPerAircraft?from_date=' + fromDate + '&to_date=' + toDate + '&pilot_id=' + pilot, function(result) {
+                $("#crewHoursPerAircraftChartLoading").hide();
+                
+                var aircrafts = new Array();
+                var totalHours = new Array();
+                
+                result.forEach(function(data){
+                    aircrafts.push(data.registration);
+                    totalHours.push(data.block_time);
+                });
+                
+                var crewHoursPerAircraftChartCanvas = $('#crewHoursPerAircraftChart').get(0).getContext('2d')
+                var pieOptions     = {
+                    maintainAspectRatio : false,
+                    responsive : true,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                    // get the data label and data value to display
+                                    // convert the data value to local string so it uses a comma seperated number
+                                    var dataLabel = data.labels[tooltipItem.index];
+                                    
+                                    var totalTimeInMin = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                    
+                                    var value = ': ' + pad(Math.floor(totalTimeInMin / 60), 2) + ':' + pad(totalTimeInMin % 60, 2);
+                                    
+                                    // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+                                    if (Chart.helpers.isArray(dataLabel)) {
+                                        // show value on first line of multiline label
+                                        // need to clone because we are changing the value
+                                        dataLabel = dataLabel.slice();
+                                        dataLabel[0] += value;
+                                    } else {
+                                        dataLabel += value;
+                                    }
+                                    
+                                    // return the text to display on the tooltip
+                                    return dataLabel;
+                            }
+                        }
+                    }
+                }
+                
+                if (crewHoursPerAircraftChart)
+                    crewHoursPerAircraftChart.destroy();
+                
+                crewHoursPerAircraftChart = new Chart(crewHoursPerAircraftChartCanvas, {
+                    type: 'pie',
+                    data: {
+                      labels: aircrafts,
+                        datasets: [{
+                            data: totalHours,
+                            backgroundColor: palette('tol', totalHours.length).map(function(hex) {
+                                                return '#' + hex;
+                                             })
+                        }]
+                    },
+                    options: pieOptions      
+                })
+            });
+        }
     </script>
 @endpush
