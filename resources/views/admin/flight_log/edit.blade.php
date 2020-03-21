@@ -85,6 +85,16 @@
                                                 <input type="text" class="form-control" id="blockTime" name="blockTime" value="{{$block_time}}" readonly />
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Purpose</label>
+                                            <select class="col-sm-10 form-control" name="purpose" required>
+                                                <option value=""></option>
+                                                <option value="Maintenance" {{$fl->purpose == 'Maintenance' ? 'selected' : ''}}>Maintenance</option>
+                                                <option value="Operation" {{$fl->purpose == 'Operation' ? 'selected' : ''}}>Operation</option>
+                                                <option value="Group" {{$fl->purpose == 'Group' ? 'selected' : ''}}>Group</option>
+                                                <option value="Charter" {{$fl->purpose == 'Charter' ? 'selected' : ''}}>Charter</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">

@@ -94,6 +94,7 @@ class FlightLogController extends Controller
             $fl->remarks = $request->input('remarks');
         else
             $fl->remarks = '';
+        $fl->purpose = $request->input('purpose');
         $fl->save();
         
         flash()->success('Flight Log Added')->important();
@@ -173,6 +174,7 @@ class FlightLogController extends Controller
             $fl->remarks = $request->input('remarks');
         else
             $fl->remarks = '';
+        $fl->purpose = $request->input('purpose');
         $fl->save();
         
         flash()->success('Flight Log Updated')->important();

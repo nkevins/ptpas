@@ -79,6 +79,16 @@
                                                 <input type="text" class="form-control" id="blockOn" name="blockOn" data-inputmask="'mask': '99:99'" data-mask required value="{{old('blockOn')}}" />
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Purpose</label>
+                                            <select class="col-sm-10 form-control" name="purpose" required>
+                                                <option value=""></option>
+                                                <option value="Maintenance">Maintenance</option>
+                                                <option value="Operation">Operation</option>
+                                                <option value="Group">Group</option>
+                                                <option value="Charter">Charter</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">

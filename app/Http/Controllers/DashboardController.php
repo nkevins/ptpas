@@ -30,14 +30,27 @@ class DashboardController extends Controller
         
         $fromDate = Carbon::createFromFormat('d/m/Y', $request->input('from_date'))->startOfDay();
         $toDate = Carbon::createFromFormat('d/m/Y', $request->input('to_date'))->startOfDay();
+        $purpose = trim($request->input('purpose'));
         
-        $stats = DB::table('flight_logs')
+        if ($purpose == '') {
+            $stats = DB::table('flight_logs')
                     ->select(DB::raw('registration, count(*) as flight_count'))
                     ->join('aircrafts', 'aircrafts.id', '=', 'flight_logs.aircraft_id')
                     ->where('date', '>=', $fromDate)
                     ->where('date', '<=', $toDate)
                     ->groupBy('registration')
+                    ->get();    
+        } else {
+            $stats = DB::table('flight_logs')
+                    ->select(DB::raw('registration, count(*) as flight_count'))
+                    ->join('aircrafts', 'aircrafts.id', '=', 'flight_logs.aircraft_id')
+                    ->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate)
+                    ->where('purpose', $purpose)
+                    ->groupBy('registration')
                     ->get();
+        }
+        
                     
         return $stats->toJson();
     }
@@ -50,14 +63,26 @@ class DashboardController extends Controller
         
         $fromDate = Carbon::createFromFormat('d/m/Y', $request->input('from_date'))->startOfDay();
         $toDate = Carbon::createFromFormat('d/m/Y', $request->input('to_date'))->startOfDay();
+        $purpose = trim($request->input('purpose'));
         
-        $stats = DB::table('flight_logs')
+        if ($purpose == '') {
+            $stats = DB::table('flight_logs')
                     ->select(DB::raw('registration, sum(block_time) as block_time'))
                     ->join('aircrafts', 'aircrafts.id', '=', 'flight_logs.aircraft_id')
                     ->where('date', '>=', $fromDate)
                     ->where('date', '<=', $toDate)
                     ->groupBy('registration')
+                    ->get();    
+        } else {
+            $stats = DB::table('flight_logs')
+                    ->select(DB::raw('registration, sum(block_time) as block_time'))
+                    ->join('aircrafts', 'aircrafts.id', '=', 'flight_logs.aircraft_id')
+                    ->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate)
+                    ->where('purpose', $purpose)
+                    ->groupBy('registration')
                     ->get();
+        }
                     
         return $stats->toJson();
     }

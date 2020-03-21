@@ -32,7 +32,7 @@
                                             <th colspan="4" style="text-align:center;">Route</th>
                                             <th colspan="3" style="text-align:center;">Block</th>
                                             <th colspan="4" style="text-align:center;">Crew</th>
-                                            <th colspan="3"></th>
+                                            <th colspan="4"></th>
                                         </tr>
                                         <tr>
                                             <th>Date</th>
@@ -49,6 +49,7 @@
                                             <th>EOB1</th>
                                             <th>EOB2</th>
                                             <th>PAX</th>
+                                            <th>Purpose</th>
                                             <th>RMK</th>
                                             <th></th>
                                         </tr>
@@ -94,6 +95,7 @@
                     { data: 'eob1' },
                     { data: 'eob2' },
                     { data: 'pax' },
+                    { data: 'purpose' },
                     { data: 'remarks' }
                 ],
                 columnDefs: [
@@ -132,7 +134,7 @@
                         }
                     },
                     {
-                        targets: 15,
+                        targets: 16,
                         data: null,
                         searchable: false,
                         render: function (data, type, full, meta) {

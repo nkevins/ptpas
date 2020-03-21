@@ -90,6 +90,13 @@
                                     				<h3 class="card-title">Total Flights</h3>
                                     			</div>
                                     			<div class="card-body">
+                                    			    <select class="form-control" onchange="searchTotalFlights()" id="totalFlightsPurposeSelection">
+                                    			        <option value="">All</option>
+                                    			        <option value="Maintenance">Maintenance</option>
+                                    			        <option value="Operation">Operation</option>
+                                    			        <option value="Group">Group</option>
+                                    			        <option value="Charter">Charter</option>
+                                    			    </select>
                                     			    <div class="spinner-border" id="totalFlightChartLoading"></div>
                                     				<canvas id="totalFlightChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     			</div>
@@ -103,6 +110,13 @@
                                     				<h3 class="card-title">Total Time</h3>
                                     			</div>
                                     			<div class="card-body">
+                                    			    <select class="form-control" onchange="searchTotalTime()" id="totalTimePurposeSelection">
+                                    			        <option value="">All</option>
+                                    			        <option value="Maintenance">Maintenance</option>
+                                    			        <option value="Operation">Operation</option>
+                                    			        <option value="Group">Group</option>
+                                    			        <option value="Charter">Charter</option>
+                                    			    </select>
                                     			    <div class="spinner-border" id="totalTimeChartLoading"></div>
                                     				<canvas id="totalTimeChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     			</div>
@@ -162,7 +176,7 @@
                                                                     <th colspan="4" style="text-align:center;">Route</th>
                                                                     <th colspan="3" style="text-align:center;">Block</th>
                                                                     <th colspan="4" style="text-align:center;">Crew</th>
-                                                                    <th colspan="3"></th>
+                                                                    <th colspan="4"></th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Date</th>
@@ -179,6 +193,7 @@
                                                                     <th>EOB1</th>
                                                                     <th>EOB2</th>
                                                                     <th>PAX</th>
+                                                                    <th>Purpose</th>
                                                                     <th>RMK</th>
                                                                 </tr>
                                                             </thead>
@@ -248,12 +263,149 @@
             var fromDate = $('#fromDate').val();
             var toDate = $('#toDate').val();
             
+            searchTotalFlights();
+            searchTotalTime()
+            
             // Show loading spinner
-            $("#totalFlightChartLoading").show();
-            $("#totalTimeChartLoading").show();
             $("#totalCrewHoursChartLoading").show();
             
-            $.getJSON('/admin/dashboard/data/totalFlights?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+            $.getJSON('/admin/dashboard/data/crewHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+                $("#totalCrewHoursChartLoading").hide();
+                
+                var name = new Array();
+                var totalHours = new Array();
+                
+                result.forEach(function(data){
+                    name.push(data.name);
+                    totalHours.push(data.hours);
+                });
+                
+                var crewHoursChartCanvas = $('#totalCrewHoursChart').get(0).getContext('2d')
+                var pieOptions     = {
+                    maintainAspectRatio : false,
+                    responsive : true,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                    // get the data label and data value to display
+                                    // convert the data value to local string so it uses a comma seperated number
+                                    var dataLabel = data.labels[tooltipItem.index];
+                                    
+                                    var totalTimeInMin = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                    
+                                    var value = ': ' + pad(Math.floor(totalTimeInMin / 60), 2) + ':' + pad(totalTimeInMin % 60, 2);
+                                    
+                                    // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+                                    if (Chart.helpers.isArray(dataLabel)) {
+                                        // show value on first line of multiline label
+                                        // need to clone because we are changing the value
+                                        dataLabel = dataLabel.slice();
+                                        dataLabel[0] += value;
+                                    } else {
+                                        dataLabel += value;
+                                    }
+                                    
+                                    // return the text to display on the tooltip
+                                    return dataLabel;
+                            }
+                        }
+                    }
+                }
+                
+                if (crewHoursChart)
+                    crewHoursChart.destroy();
+                
+                crewHoursChart = new Chart(crewHoursChartCanvas, {
+                    type: 'pie',
+                    data: {
+                      labels: name,
+                        datasets: [{
+                            data: totalHours,
+                            backgroundColor: palette('tol', totalHours.length).map(function(hex) {
+                                                return '#' + hex;
+                                             })
+                        }]
+                    },
+                    options: pieOptions      
+                })
+            });
+            
+            searchCrewHoursPerAircraft();
+        }
+        
+        $("#flightLogTable").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{!! action('FlightLogController@flightLogData') !!}',
+            order: [[0, 'desc']],
+            language: {
+                emptyTable: 'No Flight Log Record'
+            },
+            columns: [
+                { data: 'date' },
+                { data: 'techlog' },
+                { data: 'aircraft.registration' },
+                { data: 'departure.name' },
+                { data: 'destination.name' },
+                { data: 'route' },
+                { data: 'off_time' },
+                { data: 'on_time' },
+                { data: 'block_time' },
+                { data: 'pic.name' },
+                { data: 'sic' },
+                { data: 'eob1' },
+                { data: 'eob2' },
+                { data: 'pax' },
+                { data: 'purpose' },
+                { data: 'remarks' }
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, full, meta) {
+                        return moment(data).format("D/M/YYYY");
+                    }
+                },
+                {
+                    targets: 6,
+                    render: function (data, type, full, meta) {
+                        return moment(data, "HH:mm:ss").format("HH:mm");
+                    }
+                },
+                {
+                    targets: 7,
+                    render: function (data, type, full, meta) {
+                        return moment(data, "HH:mm:ss").format("HH:mm");
+                    }
+                },
+                {
+                    targets: 8,
+                    searchable: false,
+                    render: function (data, type, full, meta) {
+                        return moment.utc(moment.duration(parseInt(data), "minutes").asMilliseconds()).format("HH:mm");
+                    }
+                },
+                {
+                    targets: 10,
+                    render: function (data, type, full, meta) {
+                        if (data)
+                            return data.name;
+                        else
+                            return '';
+                    }
+                },
+            ]
+        });
+        
+        function searchTotalFlights()
+        {
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var purpose = $('#totalFlightsPurposeSelection').val();
+            
+            $("#totalFlightChartLoading").show();
+            
+            $.getJSON('/admin/dashboard/data/totalFlights?from_date=' + fromDate + '&to_date=' + toDate + '&purpose=' + purpose, function(result) {
                 $("#totalFlightChartLoading").hide();
                 
                 var aircrafts = new Array();
@@ -292,8 +444,17 @@
                     options: pieOptions      
                 })
             });
+        }
+        
+        function searchTotalTime()
+        {
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            var purpose = $('#totalTimePurposeSelection').val();
             
-            $.getJSON('/admin/dashboard/data/flightHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
+            $("#totalTimeChartLoading").show();
+            
+            $.getJSON('/admin/dashboard/data/flightHours?from_date=' + fromDate + '&to_date=' + toDate + '&purpose=' + purpose, function(result) {
                 $("#totalTimeChartLoading").hide();
                 
                 var aircrafts = new Array();
@@ -358,134 +519,7 @@
                     options: pieOptions      
                 })
             });
-            
-            $.getJSON('/admin/dashboard/data/crewHours?from_date=' + fromDate + '&to_date=' + toDate, function(result) {
-                $("#totalCrewHoursChartLoading").hide();
-                
-                var name = new Array();
-                var totalHours = new Array();
-                
-                result.forEach(function(data){
-                    name.push(data.name);
-                    totalHours.push(data.hours);
-                });
-                
-                var crewHoursChartCanvas = $('#totalCrewHoursChart').get(0).getContext('2d')
-                var pieOptions     = {
-                    maintainAspectRatio : false,
-                    responsive : true,
-                    tooltips: {
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                    // get the data label and data value to display
-                                    // convert the data value to local string so it uses a comma seperated number
-                                    var dataLabel = data.labels[tooltipItem.index];
-                                    
-                                    var totalTimeInMin = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                                    
-                                    var value = ': ' + pad(Math.floor(totalTimeInMin / 60), 2) + ':' + pad(totalTimeInMin % 60, 2);
-                                    
-                                    // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
-                                    if (Chart.helpers.isArray(dataLabel)) {
-                                        // show value on first line of multiline label
-                                        // need to clone because we are changing the value
-                                        dataLabel = dataLabel.slice();
-                                        dataLabel[0] += value;
-                                    } else {
-                                        dataLabel += value;
-                                    }
-                                    
-                                    // return the text to display on the tooltip
-                                    return dataLabel;
-                            }
-                        }
-                    }
-                }
-                
-                if (crewHoursChart)
-                    crewHoursChart.destroy();
-                
-                crewHoursChart = new Chart(crewHoursChartCanvas, {
-                    type: 'pie',
-                    data: {
-                      labels: name,
-                        datasets: [{
-                            data: totalHours,
-                            backgroundColor: palette('tol', totalHours.length).map(function(hex) {
-                                                return '#' + hex;
-                                             })
-                        }]
-                    },
-                    options: pieOptions      
-                })
-            });
-            
-            
-            searchCrewHoursPerAircraft();
         }
-        
-        $("#flightLogTable").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{!! action('FlightLogController@flightLogData') !!}',
-            order: [[0, 'desc']],
-            language: {
-                emptyTable: 'No Flight Log Record'
-            },
-            columns: [
-                { data: 'date' },
-                { data: 'techlog' },
-                { data: 'aircraft.registration' },
-                { data: 'departure.name' },
-                { data: 'destination.name' },
-                { data: 'route' },
-                { data: 'off_time' },
-                { data: 'on_time' },
-                { data: 'block_time' },
-                { data: 'pic.name' },
-                { data: 'sic' },
-                { data: 'eob1' },
-                { data: 'eob2' },
-                { data: 'pax' },
-                { data: 'remarks' }
-            ],
-            columnDefs: [
-                {
-                    targets: 0,
-                    render: function (data, type, full, meta) {
-                        return moment(data).format("D/M/YYYY");
-                    }
-                },
-                {
-                    targets: 6,
-                    render: function (data, type, full, meta) {
-                        return moment(data, "HH:mm:ss").format("HH:mm");
-                    }
-                },
-                {
-                    targets: 7,
-                    render: function (data, type, full, meta) {
-                        return moment(data, "HH:mm:ss").format("HH:mm");
-                    }
-                },
-                {
-                    targets: 8,
-                    searchable: false,
-                    render: function (data, type, full, meta) {
-                        return moment.utc(moment.duration(parseInt(data), "minutes").asMilliseconds()).format("HH:mm");
-                    }
-                },
-                {
-                    targets: 10,
-                    render: function (data, type, full, meta) {
-                        if (data)
-                            return data.name;
-                        else
-                            return '';
-                    }
-                },
-            ]
-        });
         
         function searchCrewHoursPerAircraft()
         {

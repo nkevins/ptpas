@@ -29,6 +29,7 @@ class CreateFlightLogsTable extends Migration
             $table->string('eob1')->default('');
             $table->string('eob2')->default('');
             $table->text('pax');
+            $table->string('purpose')->default('');
             $table->text('remarks');
             $table->timestamps();
             
