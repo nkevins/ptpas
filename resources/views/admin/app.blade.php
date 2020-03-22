@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Leaflet JS -->
+    <link rel="stylesheet" href="{{asset('plugins/leafletjs/leaflet.css')}}">
     
     @stack('styles')
 </head>
@@ -140,6 +142,9 @@
     <!-- ChartJS -->
     <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
     <script src="{{asset('plugins/palettejs/palette.js')}}"></script>
+    <!-- Leaflet JS -->
+    <script src="{{asset('plugins/leafletjs/leaflet.js')}}"></script>
+    <script src="{{asset('plugins/leafletjs/leaflet.geodesic')}}"></script>
     
     @stack('scripts')
 </body>

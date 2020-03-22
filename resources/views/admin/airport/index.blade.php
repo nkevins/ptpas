@@ -29,6 +29,8 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Lat</th>
+                                        <th>Lon</th>
                                         <th>Active</th>
                                         <th>Action</th>
                                     </tr>
@@ -37,6 +39,8 @@
                                     @foreach ($airports as $ap)
                                     <tr>
                                         <td>{{$ap->name}}</td>
+                                        <td>{{$ap->lat}}</td>
+                                        <td>{{$ap->lon}}</td>
                                         <td>
                                             @if ($ap->active)
                                                 <span class="badge badge-success">Y</span>

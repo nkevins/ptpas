@@ -30,6 +30,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="lat" class="col-sm-2 col-form-label">Lat <span style="color:red;">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lat" name="lat" placeholder="Latitude" required value="{{$ap->lat}}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-2 col-form-label">Lon <span style="color:red;">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lon" name="lon" placeholder="Longitude" required value="{{$ap->lon}}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="offset-sm-2 col-sm-10">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="active" name="active" @if($ap->active) checked @endif value="1" />

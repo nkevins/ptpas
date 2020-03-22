@@ -29,6 +29,18 @@
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Name" required />
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="lat" class="col-sm-2 col-form-label">Lat <span style="color:red;">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lat" name="lat" placeholder="Latitude" required />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-2 col-form-label">Lon <span style="color:red;">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lon" name="lon" placeholder="Longitude" required />
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

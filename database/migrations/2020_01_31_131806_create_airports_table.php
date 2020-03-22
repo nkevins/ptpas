@@ -16,6 +16,8 @@ class CreateAirportsTable extends Migration
         Schema::create('airports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->decimal('lat', 10, 6)->default(0.0);
+            $table->decimal('lon', 10, 6)->default(0.0);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

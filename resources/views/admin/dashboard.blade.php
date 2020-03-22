@@ -337,7 +337,7 @@
             processing: true,
             serverSide: true,
             ajax: '{!! action('FlightLogController@flightLogData') !!}',
-            order: [[0, 'desc']],
+            order: [[0, 'desc'], [6, 'asc']],
             language: {
                 emptyTable: 'No Flight Log Record'
             },

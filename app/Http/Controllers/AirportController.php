@@ -22,6 +22,8 @@ class AirportController extends Controller
     {
         $ap = new Airport;
         $ap->name = $request->input('name');
+        $ap->lat = $request->input('lat');
+        $ap->lon = $request->input('lon');
         $ap->save();
         
         flash()->success('Airport Created')->important();
@@ -43,6 +45,8 @@ class AirportController extends Controller
     {
         $ap = Airport::findOrFail($id);
         $ap->name = $request->input('name');
+        $ap->lat = $request->input('lat');
+        $ap->lon = $request->input('lon');
         $ap->active = $request->input('active') == "1" ? true : false;
         $ap->save();
         
