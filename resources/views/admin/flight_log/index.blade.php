@@ -208,13 +208,13 @@
             L.control.layers(baseMaps).addTo(flightMap);
             
             // Route drawing
-            const departure = {lat: parseInt(data.departure.lat), lng: parseInt(data.departure.lon)};
-            const destination = {lat: parseInt(data.destination.lat), lng: parseInt(data.destination.lon)};
+            const departure = {lat: parseFloat(data.departure.lat), lng: parseFloat(data.departure.lon)};
+            const destination = {lat: parseFloat(data.destination.lat), lng: parseFloat(data.destination.lon)};
             const geodesic = new L.Geodesic([departure, destination]).addTo(flightMap);
             
-            var departureMarker = L.marker([parseInt(data.departure.lat), parseInt(data.departure.lon)]);
+            var departureMarker = L.marker([parseFloat(data.departure.lat), parseFloat(data.departure.lon)]);
             departureMarker.bindPopup(data.departure.name);
-            var destinationMarker = L.marker([parseInt(data.destination.lat), parseInt(data.destination.lon)]);
+            var destinationMarker = L.marker([parseFloat(data.destination.lat), parseFloat(data.destination.lon)]);
             destinationMarker.bindPopup(data.destination.name);
             var markers = [
                 departureMarker,
