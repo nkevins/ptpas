@@ -92,7 +92,8 @@
                                                 <option value="Maintenance" {{$fl->purpose == 'Maintenance' ? 'selected' : ''}}>Maintenance</option>
                                                 <option value="Operation" {{$fl->purpose == 'Operation' ? 'selected' : ''}}>Operation</option>
                                                 <option value="Group" {{$fl->purpose == 'Group' ? 'selected' : ''}}>Group</option>
-                                                <option value="Charter" {{$fl->purpose == 'Charter' ? 'selected' : ''}}>Charter</option>
+                                                <option value="Charter External" {{$fl->purpose == 'Charter External' ? 'selected' : ''}}>Charter</option>
+                                                <option value="Charter Internal" {{$fl->purpose == 'Charter Internal' ? 'selected' : ''}}>Charter</option>
                                             </select>
                                         </div>
                                     </div>

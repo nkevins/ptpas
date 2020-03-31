@@ -95,7 +95,8 @@
                                     			        <option value="Maintenance">Maintenance</option>
                                     			        <option value="Operation">Operation</option>
                                     			        <option value="Group">Group</option>
-                                    			        <option value="Charter">Charter</option>
+                                    			        <option value="Charter External">Charter External</option>
+                                    			        <option value="Charter Internal">Charter Internal</option>
                                     			    </select>
                                     			    <div class="spinner-border" id="totalFlightChartLoading"></div>
                                     				<canvas id="totalFlightChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
@@ -115,7 +116,8 @@
                                     			        <option value="Maintenance">Maintenance</option>
                                     			        <option value="Operation">Operation</option>
                                     			        <option value="Group">Group</option>
-                                    			        <option value="Charter">Charter</option>
+                                    			        <option value="Charter External">Charter External</option>
+                                    			        <option value="Charter Internal">Charter Internal</option>
                                     			    </select>
                                     			    <div class="spinner-border" id="totalTimeChartLoading"></div>
                                     				<canvas id="totalTimeChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>

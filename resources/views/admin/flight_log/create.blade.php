@@ -86,7 +86,8 @@
                                                 <option value="Maintenance">Maintenance</option>
                                                 <option value="Operation">Operation</option>
                                                 <option value="Group">Group</option>
-                                                <option value="Charter">Charter</option>
+                                                <option value="Charter External">Charter External</option>
+                                                <option value="Charter Internal">Charter Internal</option>
                                             </select>
                                         </div>
                                     </div>
