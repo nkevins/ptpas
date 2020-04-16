@@ -101,7 +101,7 @@ class DashboardController extends Controller
                     ->join('users', 'users.id', '=', 'flight_logs.pic')
                     ->where('date', '>=', $fromDate)
                     ->where('date', '<=', $toDate)
-                    ->groupBy('pic')
+                    ->groupBy('users.name')
                     ->get();
                     
         $sicStats = DB::table('flight_logs')
@@ -109,7 +109,7 @@ class DashboardController extends Controller
                     ->join('users', 'users.id', '=', 'flight_logs.sic')
                     ->where('date', '>=', $fromDate)
                     ->where('date', '<=', $toDate)
-                    ->groupBy('sic')
+                    ->groupBy('users.name')
                     ->get();
                     
         $crewHours = array();

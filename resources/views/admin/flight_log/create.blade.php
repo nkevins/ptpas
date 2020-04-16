@@ -84,10 +84,10 @@
                                             <select class="col-sm-10 form-control" name="purpose" required>
                                                 <option value=""></option>
                                                 <option value="Maintenance">Maintenance</option>
-                                                <option value="Operation">Operation</option>
-                                                <option value="Group">Group</option>
-                                                <option value="Charter External">Charter External</option>
-                                                <option value="Charter Internal">Charter Internal</option>
+                            			        <option value="Operation">Operation</option>
+                            			        <option value="Charter">Charter</option>
+                            			        <option value="Group Internal">Group Internal</option>
+                            			        <option value="Group Eksternal">Group Eksternal</option>
                                             </select>
                                         </div>
                                     </div>
