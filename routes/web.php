@@ -59,6 +59,9 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
             Route::get('/flight_log/{id}/edit', 'FlightLogController@edit');
             Route::post('/flight_log/{id}/edit', 'FlightLogController@update');
             Route::post('/flight_log/remove', 'FlightLogController@delete');
+            
+            Route::get('/loadsheet/pkbks', 'LoadsheetController@pkbks');
+            Route::post('/loadsheet/pkbks', 'LoadsheetController@pkbksPrint');
         });
         
         Route::get('/flight_log/data', 'FlightLogController@flightLogData');

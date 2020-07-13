@@ -88,6 +88,23 @@
                                 <p>Airport</p>
                             </a>
                         </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-weight-hanging"></i>
+                                <p>
+                                    Loadsheet
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{action('LoadsheetController@pkbks')}}" class="nav-link" target="_blank">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>PK-BKS</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <a href="{{action('UserController@index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
