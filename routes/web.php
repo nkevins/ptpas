@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
         Route::post('/myProfile/changePassword', 'UserController@changeMyPassword');
         Route::post('/myProfile/changeOTP', 'UserController@changeMyOTPToken');
         
+        Route::get('/document', 'DocumentController@index');
+        
         Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function () {
             
             Route::get('/aircraft', 'AircraftController@index');
@@ -62,7 +64,15 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
             
             Route::get('/loadsheet/pkbks', 'LoadsheetController@pkbks');
             Route::post('/loadsheet/pkbks', 'LoadsheetController@pkbksPrint');
+            
+            Route::get('/document/create', 'DocumentController@create');
+            Route::post('/document/save', 'DocumentController@save');
+            Route::get('/document/{id}/edit', 'DocumentController@edit');
+            Route::post('/document/{id}/edit', 'DocumentController@update');
+            Route::post('/document/delete', 'DocumentController@delete');
         });
+        
+        Route::get('/document/{hash}', 'DocumentController@download');
         
         Route::get('/flight_log/data', 'FlightLogController@flightLogData');
     });

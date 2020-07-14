@@ -69,6 +69,12 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{action('DocumentController@index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Documents</p>
+                            </a>
+                        </li>
                         @if (Auth::user()->hasRole('Admin'))
                         <li class="nav-item">
                             <a href="{{action('FlightLogController@index')}}" class="nav-link">
@@ -162,6 +168,8 @@
     <!-- Leaflet JS -->
     <script src="{{asset('plugins/leafletjs/leaflet.js')}}"></script>
     <script src="{{asset('plugins/leafletjs/leaflet.geodesic')}}"></script>
+    <!-- bs-custom-file-input -->
+    <script src="{{asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
     
     @stack('scripts')
 </body>
