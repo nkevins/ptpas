@@ -139,9 +139,16 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
             	},
             	xaxes: [
             	    {
-            	        ticks: [316, 318, 320, 322, 324, 326, 328, 330, 332, 334],
+            	        ticks: [316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334],
             	        min: 316,
-            	        max: 334
+            	        max: 334,
+            	        tickFormatter: function (val, axis) {
+                                if (val % 2 == 0)
+                                    return val;
+                                else
+                                    return '';
+                            },
+                        axisLabel: "CENTER OF GRAVITY (INCHES x 100)"
             	    },
             	    {
             	        ticks: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
@@ -152,7 +159,8 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
                                     return val;
                                 else
                                     return '';
-                            }
+                            },
+                        axisLabel: "CENTER OF GRAVITY - PERCENT MAC"
             	    }
         	    ]
             };

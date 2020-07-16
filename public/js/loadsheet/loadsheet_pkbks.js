@@ -308,10 +308,16 @@ var options = {
 		axisLabel: "WEIGHT (POUNDS x 1000)"
 	},
 	xaxis: {
-	    ticks: [316, 318, 320, 322, 324, 326, 328, 330, 332, 334],
+	    ticks: [316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334],
         min: 316,
         max: 334,
-        axisLabel: "CENTER OF GRAVITY (INCHES x 100)"
+        axisLabel: "CENTER OF GRAVITY (INCHES x 100)",
+        tickFormatter: function (val, axis) {
+                            if (val % 2 == 0)
+                                return val;
+                            else
+                                return '';
+                        }
 	}
 };
 
