@@ -144,22 +144,28 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
             	        max: 334
             	    },
             	    {
-            	        ticks: [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32],
+            	        ticks: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
             	        min: 11.45056726,
-            	        max: 33.33063209
+            	        max: 33.33063209,
+            	        tickFormatter: function (val, axis) {
+                                if (val % 2 == 0)
+                                    return val;
+                                else
+                                    return '';
+                            }
             	    }
         	    ]
             };
 
             let envelope = {
                 label: "Envelope",
-                data: [[318.92, 10],[318.92, 11.5],[324.29, 20.5],[330.74, 20.5],[330.74, 17.8],
+                data: [[318.92, 10],[318.92, 11.5],[324.29, 20.4],[330.74, 20.4],[330.74, 17.8],
                     [331.26,15.1],[331.26,10],[318.92, 10]],
                 color: "#0000ff",
             };
-            let maxRampWeightLine = {
-                label: "MRW",
-                data: [[316, 20.4], [334, 20.4]],
+            let maxTowLine = {
+                label: "MTOW",
+                data: [[316, 20.2], [334, 20.2]],
                 lines: { show: false },
                 dashes: { show: true },
                 color: "#000000",
@@ -205,7 +211,7 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
             
             var placeholder = $("#LoadsheetChart");
             
-            var plot = $.plot(placeholder, [envelope, ZFWPoint, TOWPoint, LWPoint, maxRampWeightLine,
+            var plot = $.plot(placeholder, [envelope, ZFWPoint, TOWPoint, LWPoint, maxTowLine,
                 maxLawLine, maxZfwLine, cgLine], options);
                 
                 
@@ -216,7 +222,7 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
             o = plot.pointOffset({ x: 318, y: 19.2});
             placeholder.append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#000;font-size:smaller'>MLW 18,700</div>");
             
-            o = plot.pointOffset({ x: 318, y: 20.9});
+            o = plot.pointOffset({ x: 318, y: 20.7});
             placeholder.append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#000;font-size:smaller'>MTW 20,200</div>");
             
             // ZFW Label
@@ -232,7 +238,7 @@ END LOADSHEET PK-BKS {{$departure}}/{{$destination}}
             placeholder.append("<div style='position:absolute;left:" + (o.left + 10) + "px;top:" + (o.top - 7) + "px;color:#000;font-size:smaller'>L/W</div>");
                 
             window.onresize = function (event) {
-                $.plot($("#LoadsheetChart"), [envelope, ZFWPoint, TOWPoint, LWPoint, maxRampWeightLine,
+                $.plot($("#LoadsheetChart"), [envelope, ZFWPoint, TOWPoint, LWPoint, maxTowLine,
                     maxLawLine, maxZfwLine, cgLine], options);
             }
         });

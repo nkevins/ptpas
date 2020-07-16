@@ -335,13 +335,13 @@ let fuelCgData = [[100,347.51], [200,695.02],[300,1030.04],[400,1356.72],[500,16
 
 let envelope = {
     label: "Envelope",
-    data: [[318.92, 10],[318.92, 11.5],[324.29, 20.5],[330.74, 20.5],[330.74, 17.8],
+    data: [[318.92, 10],[318.92, 11.5],[324.29, 20.4],[330.74, 20.4],[330.74, 17.8],
         [331.26,15.1],[331.26,10],[318.92, 10]],
     color: "#0000ff",
 };
-let maxRampWeightLine = {
-    label: "MRW",
-    data: [[316, 20.4], [334, 20.4]],
+let maxTowLine = {
+    label: "MTOW",
+    data: [[316, 20.2], [334, 20.2]],
     lines: { show: false },
     dashes: { show: true },
     color: "#000000",
@@ -547,7 +547,7 @@ function updatePaylodComputation() {
 
     var placeholder = $("#LoadsheetChart");
 
-    var plot = $.plot(placeholder, [envelope, ZFWPoint, TOWPoint, LWPoint, maxRampWeightLine,
+    var plot = $.plot(placeholder, [envelope, ZFWPoint, TOWPoint, LWPoint, maxTowLine,
         maxLawLine, maxZfwLine], options);
         
     // Limitation line label
@@ -557,7 +557,7 @@ function updatePaylodComputation() {
     o = plot.pointOffset({ x: 318, y: 19.2});
     placeholder.append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#000;font-size:smaller'>MLW 18,700</div>");
     
-    o = plot.pointOffset({ x: 318, y: 20.9});
+    o = plot.pointOffset({ x: 318, y: 20.7});
     placeholder.append("<div style='position:absolute;left:" + (o.left + 4) + "px;top:" + o.top + "px;color:#000;font-size:smaller'>MTW 20,200</div>");
     
     // ZFW Label
@@ -628,7 +628,7 @@ $(document).ready(function () {
     });
 
     window.onresize = function (event) {
-        $.plot($("#LoadsheetChart"), [envelope, ZFWPoint, TOWPoint, LWPoint, maxRampWeightLine,
+        $.plot($("#LoadsheetChart"), [envelope, ZFWPoint, TOWPoint, LWPoint, maxTowLine,
             maxLawLine, maxZfwLine], options);
     }
 
