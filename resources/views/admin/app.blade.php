@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Leaflet JS -->
     <link rel="stylesheet" href="{{asset('plugins/leafletjs/leaflet.css')}}">
-    
+
     @stack('styles')
 </head>
 
@@ -117,6 +117,12 @@
                                 <p>Users</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{action('GiaOfpController@index')}}" class="nav-link" target="_blank">
+                                <i class="nav-icon fas fa-paperclip"></i>
+                                <p>GIA OFP</p>
+                            </a>
+                        </li>
                         @endif
                         <li class="nav-item">
                             <a href="{{action('Auth\LoginController@logout')}}" class="nav-link">
@@ -170,7 +176,7 @@
     <script src="{{asset('plugins/leafletjs/leaflet.geodesic')}}"></script>
     <!-- bs-custom-file-input -->
     <script src="{{asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
-    
+
     @stack('scripts')
 </body>
 
