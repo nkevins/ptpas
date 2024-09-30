@@ -31,7 +31,8 @@ class FlightLogController extends Controller
             ->select('flight_logs.id', 'flight_logs.techlog', 'aircraft.registration as aircraft.registration',
                 'departure.name as departure.name', 'destination.name as destination.name', 'flight_logs.route',
                 'pic.name as pic.name', 'sic.name as sic.name', 'flight_logs.eob1', 'flight_logs.eob2', 'flight_logs.pax',
-                'flight_logs.purpose', 'flight_logs.remarks')
+                'flight_logs.purpose', 'flight_logs.remarks', 'flight_logs.off_time', 'flight_logs.on_time',
+                'flight_logs.block_time')
             ->get();
 
         return DataTables::of($query)->toJson();
